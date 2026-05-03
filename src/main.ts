@@ -19,11 +19,15 @@ async function run(): Promise<void> {
     core.getBooleanInput('review_comment_lgtm'),
     core.getMultilineInput('path_filters'),
     core.getInput('system_message'),
-    core.getInput('openai_model'),
-    core.getInput('openai_model_temperature'),
-    core.getInput('openai_retries'),
-    core.getInput('openai_timeout_ms'),
-    core.getInput('openai_concurrency_limit')
+
+    // ✅ use groq model
+    core.getInput('groq_model') || 'llama3-70b-8192',
+
+    // ✅ KEEP AS STRING (IMPORTANT)
+    core.getInput('temperature') || "0",
+    core.getInput('retries') || "5",
+    core.getInput('timeout_ms') || "60000",
+    core.getInput('concurrency_limit') || "4"
   )
   const prompts: Prompts = new Prompts(
     core.getInput('review_beginning'),
