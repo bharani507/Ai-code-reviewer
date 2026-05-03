@@ -87,7 +87,7 @@ export const handleReviewComment = async (
           owner: repo.owner,
           repo: repo.repo,
           path: comment.path,
-          ref: context.payload.pull_request.base.sha
+          ref: context.payload.pull_request.head.sha
         })
         if (contents.data) {
           if (!Array.isArray(contents.data)) {
