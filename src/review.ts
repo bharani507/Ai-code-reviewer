@@ -20,7 +20,7 @@ if (a = 5) {
   console.log("bug here");
 }
 
-const trigger_again = true;
+
 export const codeReview = async (
   bot: Bot,
   options: Options,
