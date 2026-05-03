@@ -3,6 +3,10 @@ import { Bot } from './bot.js';
 import { Options, Prompts } from './options.js';
 import { handleReviewComment } from './review-comment.js';
 import { codeReview } from './review.js';
+const apiKey = process.env.GROQ_API_KEY || core.getInput("groq_api_key");
+if (!apiKey) {
+    throw new Error("Missing GROQ API KEY");
+}
 async function run() {
     const options = new Options(core.getBooleanInput('debug'), core.getInput('max_files'), core.getBooleanInput('review_comment_lgtm'), core.getMultilineInput('path_filters'), core.getInput('system_message'), core.getInput('openai_model'), core.getInput('openai_model_temperature'), core.getInput('openai_retries'), core.getInput('openai_timeout_ms'), core.getInput('openai_concurrency_limit'));
     const prompts = new Prompts(core.getInput('review_beginning'), core.getInput('review_file'), core.getInput('review_file_diff'), core.getInput('review_patch_begin'), core.getInput('review_patch'), core.getInput('summarize_beginning'), core.getInput('summarize_file_diff'), core.getInput('summarize'), core.getInput('summarize_release_notes'), core.getInput('comment_beginning'), core.getInput('comment_file'), core.getInput('comment_file_diff'), core.getInput('comment'));

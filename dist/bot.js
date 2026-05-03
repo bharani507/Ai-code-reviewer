@@ -1,16 +1,18 @@
 import './fetch-polyfill.js';
+import * as core from '@actions/core';
 import OpenAI from 'openai';
 export class Bot {
     client;
     options;
     constructor(options) {
         this.options = options;
-        if (!process.env.GROQ_API_KEY) {
-            throw new Error("GROQ_API_KEY is missing");
+        const apiKey = process.env.GROQ_API_KEY || core.getInput("groq_api_key");
+        if (!apiKey) {
+            throw new Error("Missing GROQ API KEY");
         }
         this.client = new OpenAI({
-            apiKey: process.env.GROQ_API_KEY,
-            baseURL: 'https://api.groq.com/openai/v1'
+            apiKey: apiKey,
+            baseURL: "https://api.groq.com/openai/v1",
         });
     }
     chat = async (message, _ids) => {
@@ -39,7 +41,8 @@ export class Bot {
             return [text, {}];
         }
         catch (e) {
-            return ['', {}];
+            console.error("GROQ ERROR:", e);
+            throw e;
         }
     };
 }

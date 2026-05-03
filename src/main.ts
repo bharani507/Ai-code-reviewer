@@ -3,6 +3,14 @@ import {Bot} from './bot.js'
 import {Options, Prompts} from './options.js'
 import {handleReviewComment} from './review-comment.js'
 import {codeReview} from './review.js'
+import OpenAI from "openai";
+
+const apiKey =
+  process.env.GROQ_API_KEY || core.getInput("groq_api_key");
+
+if (!apiKey) {
+  throw new Error("Missing GROQ API KEY");
+}
 
 async function run(): Promise<void> {
   const options: Options = new Options(

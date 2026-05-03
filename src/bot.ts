@@ -14,14 +14,17 @@ export class Bot {
   constructor(options: optionsJs.Options) {
     this.options = options
 
-    if (!process.env.GROQ_API_KEY) {
-      throw new Error("GROQ_API_KEY is missing")
+    const apiKey =
+      process.env.GROQ_API_KEY || core.getInput("groq_api_key");
+
+    if (!apiKey) {
+      throw new Error("Missing GROQ API KEY");
     }
 
     this.client = new OpenAI({
-      apiKey: process.env.GROQ_API_KEY,
-      baseURL: 'https://api.groq.com/openai/v1'
-    })
+      apiKey: apiKey,
+      baseURL: "https://api.groq.com/openai/v1",
+    });
   }
 
   chat = async (message: string, _ids?: any): Promise<[string, Ids]> => {
@@ -51,8 +54,9 @@ export class Bot {
       }
 
       return [text, {}]
-    } catch (e: any) {
-      return ['', {}]
+        } catch (e: any) {
+      console.error("GROQ ERROR:", e);
+      throw e;
     }
   }
 }
