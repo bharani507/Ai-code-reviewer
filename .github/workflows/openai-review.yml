@@ -16,3 +16,5 @@ jobs:
         uses: ./
         with:
           groq_api_key: ${{ secrets.GROQ_API_KEY }}
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }} 
