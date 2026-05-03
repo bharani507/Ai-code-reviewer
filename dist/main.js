@@ -25,8 +25,8 @@ async function run() {
     }
     try {
         // check if the event is pull_request
-        if (process.env.GITHUB_EVENT_NAME === 'pull_request' ||
-            process.env.GITHUB_EVENT_NAME === 'pull_request_target') {
+        if (process.env.GITHUB_EVENT_NAME?.includes('pull_request')) {
+            console.log("EVENT:", process.env.GITHUB_EVENT_NAME);
             await codeReview(bot, options, prompts);
         }
         else if (process.env.GITHUB_EVENT_NAME === 'pull_request_review_comment') {

@@ -11,6 +11,12 @@ const token = core.getInput('token')
 const octokit = new Octokit({ auth: `token ${token}` });
 const context = github.context;
 const repo = context.repo;
+const test_trigger_review = 1;
+// TEST CHANGE FOR AI REVIEW
+const a = 10;
+if (a = 5) {
+    console.log("bug here");
+}
 export const codeReview = async (bot, options, prompts) => {
     const commenter = new Commenter();
     await commenter.comment("BOT IS WORKING ✅", "test-tag", "replace");
