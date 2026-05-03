@@ -20,7 +20,6 @@ if (a = 5) {
 const trigger_again = true;
 export const codeReview = async (bot, options, prompts) => {
     const commenter = new Commenter();
-    await commenter.comment("BOT IS WORKING ✅", "test-tag", "replace");
     const openai_concurrency_limit = pLimit(options.openai_concurrency_limit);
     if (context.eventName !== 'pull_request' &&
         context.eventName !== 'pull_request_target') {
