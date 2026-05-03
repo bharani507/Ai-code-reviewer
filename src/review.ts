@@ -17,6 +17,8 @@ const test_trigger_review = 1;
 // safe change
 let x = 999; // trigger AI review
 
+let trigger = Math.random();
+
 
 export const codeReview = async (
   bot: Bot,
