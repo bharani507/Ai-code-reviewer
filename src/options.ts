@@ -217,15 +217,16 @@ export class Options {
     openai_concurrency_limit = '4'
   ) {
     this.debug = debug
-    this.max_files = parseInt(max_files)
+    this.max_files = parseInt(max_files) || 60
     this.review_comment_lgtm = review_comment_lgtm
     this.path_filters = new PathFilter(path_filters)
     this.system_message = system_message
     this.openai_model = openai_model
-    this.openai_model_temperature = parseFloat(openai_model_temperature)
-    this.openai_retries = parseInt(openai_retries)
-    this.openai_timeout_ms = parseInt(openai_timeout_ms)
-    this.openai_concurrency_limit = parseInt(openai_concurrency_limit)
+    this.openai_model_temperature = parseFloat(openai_model_temperature) || 0
+    this.openai_retries = parseInt(openai_retries) || 5
+    this.openai_timeout_ms = parseInt(openai_timeout_ms) || 60000
+    this.openai_concurrency_limit =
+      parseInt(openai_concurrency_limit) || 4
 
     if (this.openai_model === 'gpt-4') {
       this.max_tokens_for_extra_content = 4000
