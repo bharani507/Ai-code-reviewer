@@ -21,20 +21,7 @@ export class Bot {
             if (!message)
                 return ['', {}];
             console.log("🚀 CALLING GROQ...");
-            const response = await this.client.chat.completions.create({
-                model: 'llama-3.3-70b-versatile',
-                messages: [
-                    {
-                        role: 'system',
-                        content: this.options.system_message || 'You are a code reviewer'
-                    },
-                    {
-                        role: 'user',
-                        content: message
-                    }
-                ],
-                temperature: 0.2
-            });
+            c;
             // ✅ DEBUG (IMPORTANT)
             console.log("✅ RESPONSE:", JSON.stringify(response, null, 2));
             const text = response?.choices?.[0]?.message?.content;
