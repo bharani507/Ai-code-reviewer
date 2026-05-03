@@ -9,11 +9,15 @@ author: 'FluxNinja, Inc.'
 
 
 inputs:
+  
+  github_token:
+    required: true
+    description: 'GitHub token'
 
   groq_api_key:
     required: true
     description: 'Groq API Key'
-    
+
   debug:
     required: false
     description: 'Enable debug mode'
