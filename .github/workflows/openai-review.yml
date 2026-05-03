@@ -12,11 +12,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install dependencies   # ✅ ADD THIS
+        run: npm install
+
       - name: Run Reviewer
         uses: ./
         with:
           groq_api_key: ${{ secrets.GROQ_API_KEY }}
-          
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
