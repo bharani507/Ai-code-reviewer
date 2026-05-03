@@ -18,8 +18,9 @@ export class Bot {
         try {
             if (!message)
                 return ['', {}];
+            console.log("🚀 CALLING GROQ...");
             const response = await this.client.chat.completions.create({
-                model: this.options.openai_model || 'llama3-70b-8192',
+                model: 'llama3-70b-8192',
                 messages: [
                     {
                         role: 'system',
@@ -30,10 +31,10 @@ export class Bot {
                         content: message
                     }
                 ],
-                temperature: Number(this.options.openai_model_temperature ?? "0.2")
+                temperature: 0.2
             });
             // ✅ DEBUG (IMPORTANT)
-            console.log("GROQ RESPONSE:", JSON.stringify(response, null, 2));
+            console.log("✅ RESPONSE:", JSON.stringify(response, null, 2));
             const text = response?.choices?.[0]?.message?.content;
             if (!text) {
                 console.log("⚠️ EMPTY RESPONSE FROM GROQ");

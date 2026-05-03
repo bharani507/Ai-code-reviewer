@@ -14,6 +14,7 @@ const repo = context.repo;
 const test_trigger_review = 1;
 // safe change
 let x = 999; // trigger AI review
+let trigger = Math.random();
 export const codeReview = async (bot, options, prompts) => {
     const commenter = new Commenter();
     const openai_concurrency_limit = pLimit(options.openai_concurrency_limit);

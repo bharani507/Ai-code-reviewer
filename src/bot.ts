@@ -14,20 +14,22 @@ export class Bot {
     if (!process.env.GROQ_API_KEY) {
       throw new Error("GROQ_API_KEY is missing")
     }
-
+    
     // ✅ CRITICAL: Groq base URL
     this.client = new OpenAI({
       apiKey: process.env.GROQ_API_KEY,
       baseURL: 'https://api.groq.com/openai/v1'
     })
   }
+   
 
   chat = async (message: string, _ids?: any): Promise<[string, Ids]> => {
     try {
       if (!message) return ['', {}]
+      console.log("🚀 CALLING GROQ...");
 
       const response = await this.client.chat.completions.create({
-        model: this.options.openai_model || 'llama3-70b-8192', // ✅ use your model
+        model: 'llama3-70b-8192',// ✅ use your model
         messages: [
           {
             role: 'system',
@@ -38,11 +40,12 @@ export class Bot {
             content: message
           }
         ],
-        temperature: Number(this.options.openai_model_temperature ?? "0.2")
+        temperature: 0.2
       })
 
       // ✅ DEBUG (IMPORTANT)
-      console.log("GROQ RESPONSE:", JSON.stringify(response, null, 2))
+      
+      console.log("✅ RESPONSE:", JSON.stringify(response, null, 2));
 
       const text = response?.choices?.[0]?.message?.content
 
