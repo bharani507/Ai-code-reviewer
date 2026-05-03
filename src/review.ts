@@ -13,6 +13,7 @@ const token = core.getInput('token')
 const octokit = new Octokit({auth: `token ${token}`})
 const context = github.context
 const repo = context.repo
+const test_trigger_review = 1;
 
 export const codeReview = async (
   bot: Bot,
