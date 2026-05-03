@@ -1,10 +1,7 @@
 import './fetch-polyfill.js'
-
-import * as core from '@actions/core'
-import OpenAI from 'openai'
 import * as optionsJs from './options.js'
+import OpenAI from 'openai'
 
-// define type
 export type Ids = {}
 
 export class Bot {
@@ -14,49 +11,56 @@ export class Bot {
   constructor(options: optionsJs.Options) {
     this.options = options
 
-    const apiKey =
-      process.env.GROQ_API_KEY || core.getInput("groq_api_key");
+    const apiKey = process.env.GROQ_API_KEY || process.env.INPUT_GROQ_API_KEY;
 
     if (!apiKey) {
-      throw new Error("Missing GROQ API KEY");
+      throw new Error("GROQ_API_KEY is missing")
     }
-
+    
+    // ✅ CRITICAL: Groq base URL
     this.client = new OpenAI({
       apiKey: apiKey,
-      baseURL: "https://api.groq.com/openai/v1",
-    });
+      baseURL: 'https://api.groq.com/openai/v1'
+    })
+    console.log("API KEY PRESENT:", !!apiKey)
   }
+   
 
   chat = async (message: string, _ids?: any): Promise<[string, Ids]> => {
     try {
       if (!message) return ['', {}]
+      console.log("🚀 CALLING GROQ...");
 
       const response = await this.client.chat.completions.create({
-        model: 'llama3-70b-8192',
+        model:'llama-3.3-70b-versatile',// ✅ use your model
         messages: [
           {
             role: 'system',
-            content: 'You are a senior code reviewer. Give clear feedback on code quality, bugs, and improvements.'
+            content: this.options.system_message || 'You are a code reviewer'
           },
           {
             role: 'user',
             content: message
           }
         ],
-        temperature: 0.3
+        temperature: 0.2
       })
-      console.log("GROQ RESPONSE:", JSON.stringify(response, null, 2))
+
+      // ✅ DEBUG (IMPORTANT)
+      
+      console.log("✅ RESPONSE:", JSON.stringify(response, null, 2));
 
       const text = response?.choices?.[0]?.message?.content
 
       if (!text) {
-        throw new Error("Groq returned empty response")
+        console.log("⚠️ EMPTY RESPONSE FROM GROQ")
+        return ['', {}]
       }
 
       return [text, {}]
-        } catch (e: any) {
-      console.error("GROQ ERROR:", e);
-      throw e;
+    } catch (e: any) {
+      console.log("❌ GROQ ERROR:", e.message)
+      return ['', {}]
     }
   }
 }

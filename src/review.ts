@@ -13,6 +13,12 @@ const token = core.getInput('token')
 const octokit = new Octokit({auth: `token ${token}`})
 const context = github.context
 const repo = context.repo
+const test_trigger_review = 1;
+// safe change
+let x = 999; // trigger AI review
+
+let trigger = Math.random();
+
 
 export const codeReview = async (
   bot: Bot,
@@ -20,6 +26,7 @@ export const codeReview = async (
   prompts: Prompts
 ) => {
   const commenter: Commenter = new Commenter()
+  
 
   const openai_concurrency_limit = pLimit(options.openai_concurrency_limit)
 

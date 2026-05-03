@@ -1,48 +1,50 @@
 import './fetch-polyfill.js';
-import * as core from '@actions/core';
 import OpenAI from 'openai';
 export class Bot {
     client;
     options;
     constructor(options) {
         this.options = options;
-        const apiKey = process.env.GROQ_API_KEY || core.getInput("groq_api_key");
+        const apiKey = process.env.GROQ_API_KEY || process.env.INPUT_GROQ_API_KEY;
         if (!apiKey) {
-            throw new Error("Missing GROQ API KEY");
+            throw new Error("GROQ_API_KEY is missing");
         }
         this.client = new OpenAI({
             apiKey: apiKey,
-            baseURL: "https://api.groq.com/openai/v1",
+            baseURL: 'https://api.groq.com/openai/v1'
         });
+        console.log("API KEY PRESENT:", !!apiKey);
     }
     chat = async (message, _ids) => {
         try {
             if (!message)
                 return ['', {}];
+            console.log("🚀 CALLING GROQ...");
             const response = await this.client.chat.completions.create({
-                model: 'llama3-70b-8192',
+                model: 'llama3-8b-8192',
                 messages: [
                     {
                         role: 'system',
-                        content: 'You are a senior code reviewer. Give clear feedback on code quality, bugs, and improvements.'
+                        content: this.options.system_message || 'You are a code reviewer'
                     },
                     {
                         role: 'user',
                         content: message
                     }
                 ],
-                temperature: 0.3
+                temperature: 0.2
             });
-            console.log("GROQ RESPONSE:", JSON.stringify(response, null, 2));
+            console.log("✅ RESPONSE RECEIVED");
             const text = response?.choices?.[0]?.message?.content;
             if (!text) {
-                throw new Error("Groq returned empty response");
+                console.log("⚠️ EMPTY RESPONSE FROM GROQ");
+                return ['', {}];
             }
             return [text, {}];
         }
         catch (e) {
-            console.error("GROQ ERROR:", e);
-            throw e;
+            console.log("❌ GROQ ERROR:", e.message);
+            return ['', {}];
         }
     };
 }
