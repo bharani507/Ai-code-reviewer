@@ -11,15 +11,18 @@ export class Bot {
   constructor(options: optionsJs.Options) {
     this.options = options
 
-    if (!process.env.GROQ_API_KEY) {
+    const apiKey = process.env.GROQ_API_KEY || process.env.INPUT_GROQ_API_KEY;
+
+    if (!apiKey) {
       throw new Error("GROQ_API_KEY is missing")
     }
     
     // ✅ CRITICAL: Groq base URL
     this.client = new OpenAI({
-      apiKey: process.env.GROQ_API_KEY,
+      apiKey: apiKey,
       baseURL: 'https://api.groq.com/openai/v1'
     })
+    console.log("API KEY PRESENT:", !!apiKey)
   }
    
 
