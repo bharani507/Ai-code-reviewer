@@ -1,0 +1,87 @@
+name: 'Groq-based PR Reviewer & Summarizer'
+description: 'Groq-based PR Reviewer and Summarizer'
+
+branding:
+  icon: 'aperture'
+  color: 'orange'
+
+author: 'FluxNinja, Inc.'
+
+inputs:
+  debug:
+    required: false
+    description: 'Enable debug mode'
+    default: 'false'
+
+  max_files:
+    required: false
+    description: 'Max files to review. Less than or equal to 0 means no limit.'
+    default: '60'
+
+  review_comment_lgtm:
+    required: false
+    description: 'Leave comments even if the patch is LGTM'
+    default: 'false'
+
+  path_filters:
+    required: false
+    description: 'Path filters'
+    default: |
+      !dist/**
+      !**/*.pb.go
+      !**/*.lock
+      !**/*.yaml
+      !**/*.yml
+      !**/*.cfg
+      !**/*.toml
+      !**/*.ini
+      !**/*.mod
+      !**/*.sum
+      !**/*.json
+      !**/*.mmd
+      !**/*.svg
+      !**/*.png
+      !**/*.dot
+      !**/*.md5sum
+      !**/gen/**
+      !**/_gen/**
+      !**/vendor/**
+
+  # ✅ CHANGED
+  groq_model:
+    required: false
+    description: 'Groq model to use'
+    default: 'llama3-70b-8192'
+
+  # (optional rename — safe)
+  temperature:
+    required: false
+    description: 'Model temperature'
+    default: '0.0'
+
+  retries:
+    required: false
+    description: 'Retry count'
+    default: '5'
+
+  timeout_ms:
+    required: false
+    description: 'Timeout in ms'
+    default: '60000'
+
+  concurrency_limit:
+    required: false
+    description: 'Concurrency limit'
+    default: '4'
+
+  system_message:
+    required: false
+    description: 'System message'
+    default: |
+      You are a highly experienced software engineer who reviews code thoroughly.
+
+# ⚠️ KEEP ALL OTHER PROMPTS SAME (no need to touch)
+
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
