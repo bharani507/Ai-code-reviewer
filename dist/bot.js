@@ -9,7 +9,6 @@ export class Bot {
         if (!apiKey) {
             throw new Error("GROQ_API_KEY is missing");
         }
-        // ✅ CRITICAL: Groq base URL
         this.client = new OpenAI({
             apiKey: apiKey,
             baseURL: 'https://api.groq.com/openai/v1'
@@ -21,9 +20,21 @@ export class Bot {
             if (!message)
                 return ['', {}];
             console.log("🚀 CALLING GROQ...");
-            c;
-            // ✅ DEBUG (IMPORTANT)
-            console.log("✅ RESPONSE:", JSON.stringify(response, null, 2));
+            const response = await this.client.chat.completions.create({
+                model: 'llama3-8b-8192',
+                messages: [
+                    {
+                        role: 'system',
+                        content: this.options.system_message || 'You are a code reviewer'
+                    },
+                    {
+                        role: 'user',
+                        content: message
+                    }
+                ],
+                temperature: 0.2
+            });
+            console.log("✅ RESPONSE RECEIVED");
             const text = response?.choices?.[0]?.message?.content;
             if (!text) {
                 console.log("⚠️ EMPTY RESPONSE FROM GROQ");
