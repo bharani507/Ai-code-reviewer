@@ -14,11 +14,8 @@ const octokit = new Octokit({auth: `token ${token}`})
 const context = github.context
 const repo = context.repo
 const test_trigger_review = 1;
-// TEST CHANGE FOR AI REVIEW
-let a = 10;
-if (a = 5) {
-  console.log("bug here");
-}
+// safe change
+let x = 1;
 
 
 export const codeReview = async (
